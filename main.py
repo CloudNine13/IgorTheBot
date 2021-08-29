@@ -26,8 +26,8 @@ def configure_logging() -> logging:
 
 
 logger = configure_logging()
-TOKEN = os.environ.get("API_TOKEN")
-
+#TOKEN = os.environ.get("API_TOKEN")
+TOKEN = "1953729446:AAEv8oVAA_Of-u7-AII7Bm9OWnlG55jCKq8"
 
 class CustomApplication(ABC):
     """This is the abstract class of Telegram Bot
