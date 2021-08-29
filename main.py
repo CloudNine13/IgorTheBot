@@ -19,7 +19,6 @@ def configure_logging() -> logging:
     :return logging: return configured logger object"""
 
     logging.basicConfig(
-        filename=f"logs/{__name__}log{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.log",
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO
     )
