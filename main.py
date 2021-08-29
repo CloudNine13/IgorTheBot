@@ -152,6 +152,7 @@ class TelegramBot(CustomApplication):
 
     def button_controller(self, update: Update, context: CallbackContext) -> None:
         print("button_controller: User triggered the button's callback!")
+        self.movieSearchSwitch = True
         query = update.callback_query
         query.answer()
         choice = query.data
@@ -170,8 +171,6 @@ class TelegramBot(CustomApplication):
         if choice == 'Без разницы':
             self.cuo.search_type = "SearchAll"
             context.bot.send_message(chat_id, "Вы выбрали категорию без разницы. \nВведите интересующий вас запрос:")
-
-        self.movieSearchSwitch = True
 
     def error_controller(self, update: Update, context: CallbackContext) -> None:
         print("error_controller: Error happened!")
