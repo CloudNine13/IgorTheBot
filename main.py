@@ -1,4 +1,3 @@
-import dotenv
 import os
 import logging
 import threading
@@ -28,7 +27,6 @@ def configure_logging() -> logging:
 
 
 logger = configure_logging()
-dotenv.load_dotenv(dotenv.find_dotenv())
 TOKEN = os.environ.get("API_TOKEN")
 
 
