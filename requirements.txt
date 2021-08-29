@@ -1,0 +1,5 @@
+python-telegram-bot
+python-dotenv>=0.18.0
+regex>=2021.8.28
+requests>=2.26.0
+urllib3>=1.26.6
