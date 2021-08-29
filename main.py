@@ -26,8 +26,8 @@ def configure_logging() -> logging:
 
 
 logger = configure_logging()
-#TOKEN = os.environ.get("API_TOKEN")
-TOKEN = "1953729446:AAEv8oVAA_Of-u7-AII7Bm9OWnlG55jCKq8"
+TOKEN = os.environ.get("API_TOKEN")
+
 
 class CustomApplication(ABC):
     """This is the abstract class of Telegram Bot
@@ -75,7 +75,7 @@ class TelegramBot(CustomApplication):
     cuo = CustomUrlObject()
 
     def __init__(self) -> None:
-        self.updater = Updater(TOKEN, use_context=True)
+        self.updater = Updater(TOKEN, use_context=True, request_kwargs={'read_timeout': 1000, 'connect_timeout': 1000})
         print("__init__: Successfully initiated!")
 
     def setup_dispatcher(self) -> None:
