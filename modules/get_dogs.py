@@ -23,10 +23,8 @@ def get_dogs(chat_id: str, context: CallbackContext) -> None:
     if mimetype is not None:
         mimetype = mimetype.split('/')[1]
         print(mimetype)
-        if mimetype.lower().endswith(('png', 'jpg', 'jpeg')):
+        if mimetype.lower().endswith(('png', 'jpg', 'jpeg', 'gif')):
             context.bot.send_photo(chat_id=chat_id, photo=link)
-        if mimetype.lower().endswith('gif'):
-            context.bot.send_animation(chat_id=chat_id, animation=link)
         elif link.lower().endswith(('mp4', 'webm', 'wav')):
             context.bot.send_video(chat_id=chat_id, video=link, supports_streaming=True)
         else:  # link.lower().endswith(('.png', '.jpg', '.jpeg'))
