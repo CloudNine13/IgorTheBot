@@ -15,8 +15,8 @@ from modules.movie_menu import movie_menu
 def prepare_api():
     t = requests.get(
         f"https://api.themoviedb.org/3/authentication/token/new?api_key={os.environ.get('API_KEY')}"
-    ).json().read()
-    requests.post(f"https://www.themoviedb.org/authenticate/{t.get('request_token')}")
+    ).json().get('request_token')
+    requests.post(f"https://www.themoviedb.org/authenticate/{t}")
 
 
 def get_movie(url: CustomUrlObject, update: Update, chat_id: str, context: CallbackContext) -> None:
