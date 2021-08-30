@@ -1,15 +1,13 @@
-import os
 import logging
+import os
 import threading
-import urllib
+from abc import ABC, abstractmethod
 
 import dotenv
 import regex
-
-from abc import ABC, abstractmethod
-from urllib.parse import quote
 from telegram import ReplyKeyboardMarkup, KeyboardButton, Update, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
+
 from models.custom_url_object import CustomUrlObject
 from modules.get_dogs import get_dogs
 from modules.get_movie import get_movie
@@ -29,7 +27,7 @@ def configure_logging() -> logging:
 
 logger = configure_logging()
 dotenv.load_dotenv(dotenv.find_dotenv())
-TOKEN = os.environ["API_TOKEN_F"]
+TOKEN = os.environ["API_TOKEN"]
 
 
 class CustomApplication(ABC):

@@ -1,8 +1,4 @@
-import json
 import mimetypes
-import urllib
-
-from urllib import request
 
 import requests
 from telegram.ext import CallbackContext

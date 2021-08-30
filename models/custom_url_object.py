@@ -1,6 +1,5 @@
 import os
 from dataclasses import dataclass, field
-from typing import ClassVar
 
 
 @dataclass
@@ -15,4 +14,5 @@ class CustomUrlObject:
         :return str: Url string to make a search in API"""
         self.search_term = self.search_term.strip()
         self.search_term = self.search_term.replace(" ", "%20")
-        return f"https://api.themoviedb.org/3/search/{self.search_type}?api_key={os.environ.get('API_KEY')}&language=ru-RU&query={self.search_term}&page=1&include_adult=true"
+        return f"https://api.themoviedb.org/3/search/{self.search_type}?api_key={os.environ.get('API_KEY')}&language" \
+               f"=ru-RU&query={self.search_term}&page=1&include_adult=true "
