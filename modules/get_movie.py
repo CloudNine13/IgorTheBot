@@ -12,12 +12,6 @@ from models.custom_url_object import CustomUrlObject
 from modules.movie_menu import movie_menu
 
 
-def prepare_api():
-    requests.get(
-        f"https://api.themoviedb.org/3/authentication/guest_session/new?api_key={os.environ.get('API_KEY')}"
-    ).json()
-
-
 def get_movie(url: CustomUrlObject, update: Update, chat_id: str, context: CallbackContext) -> None:
     """Method to get movies information
     :param update: Update - is used tp call for movie menu
@@ -25,9 +19,6 @@ def get_movie(url: CustomUrlObject, update: Update, chat_id: str, context: Callb
     :param chat_id: str - is used to respond to user in chat
     :param context: CallbackContext - is used to send messages to chat"""
     print("get_movie: Getting movie!")
-
-    prepare_api()
-
     try:
         response = json.load(urllib.request.urlopen(url.make_url()))
     except TimedOut as ex:
