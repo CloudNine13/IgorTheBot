@@ -1,13 +1,15 @@
 import os
 import logging
 import threading
+import urllib
+
+import dotenv
 import regex
 
 from abc import ABC, abstractmethod
-from datetime import datetime
+from urllib.parse import quote
 from telegram import ReplyKeyboardMarkup, KeyboardButton, Update, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
-
 from models.custom_url_object import CustomUrlObject
 from modules.get_dogs import get_dogs
 from modules.get_movie import get_movie
@@ -26,7 +28,8 @@ def configure_logging() -> logging:
 
 
 logger = configure_logging()
-TOKEN = os.environ.get("API_TOKEN")
+dotenv.load_dotenv(dotenv.find_dotenv())
+TOKEN = os.environ["API_TOKEN_F"]
 
 
 class CustomApplication(ABC):
@@ -118,7 +121,7 @@ class TelegramBot(CustomApplication):
             self.cuo.locale = update.effective_user.language_code  # Configure custom url object's locale string
             context.bot.send_message(
                 chat_id,
-                "Вы выбрали категорию Фильмы. Поиск в категории осуществляется _*на английском языке*_",
+                "Вы выбрали категорию *Фильмы*. Поиск ведётся на _*английском языке*_. Пока что.",
                 parse_mode='Markdown',
                 reply_markup=ReplyKeyboardRemove()
             )
@@ -130,23 +133,15 @@ class TelegramBot(CustomApplication):
             send_thread.start()
         elif self.movieSearchSwitch:
             if regex.search(r'\p{IsCyrillic}', text) is not None:
-                context.bot.send_message(chat_id, "Текст поиска должен быть на английском!")
-                context.bot.send_message(chat_id, "Попробуйте еще раз!")
-                send_thread = threading.Thread(
-                    target=movie_menu,
-                    name="Make movie menu",
-                    args=(update,)
-                )
-                send_thread.start()
-            else:
-                self.cuo.search_term = text
-                self.movieSearchSwitch = False
-                send_thread = threading.Thread(
-                    target=get_movie,
-                    name="Get movies",
-                    args=(self.cuo.make_url(), chat_id, context)
-                )
-                send_thread.start()
+                text = u"%s".format(text)
+            self.cuo.search_term = text
+            self.movieSearchSwitch = False
+            send_thread = threading.Thread(
+                target=get_movie,
+                name="Get movies",
+                args=(self.cuo, update, chat_id, context)
+            )
+            send_thread.start()
         else:
             context.bot.send_message(chat_id, "Я пока еще не знаю такой команды :С")
 
@@ -160,17 +155,14 @@ class TelegramBot(CustomApplication):
         chat_id = update.effective_chat.id
 
         if choice == 'Фильмы':
-            self.cuo.search_type = "SearchMovie"
+            self.cuo.search_type = "movie"
             context.bot.send_message(chat_id, "Вы выбрали категорию фильмы. \nУкажите, пожалуйста, название фильма:")
         if choice == 'Актёры':
-            self.cuo.search_type = "SearchName"
+            self.cuo.search_type = "person"
             context.bot.send_message(chat_id, "Вы выбрали категорию актеры. \nУкажите, пожалуйста, имя актера:")
         if choice == 'Сериалы':
-            self.cuo.search_type = "SearchSeries"
+            self.cuo.search_type = "tv"
             context.bot.send_message(chat_id, "Вы выбрали категорию сериалы. \nУкажите, пожалуйста, название сериала:")
-        if choice == 'Без разницы':
-            self.cuo.search_type = "SearchAll"
-            context.bot.send_message(chat_id, "Вы выбрали категорию без разницы. \nВведите интересующий вас запрос:")
 
     def error_controller(self, update: Update, context: CallbackContext) -> None:
         print("error_controller: Error happened!")

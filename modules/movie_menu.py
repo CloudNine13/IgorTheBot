@@ -10,7 +10,6 @@ def movie_menu(update: Update) -> None:
         ],
         [
             InlineKeyboardButton("Сериалы", callback_data='Сериалы'),
-            InlineKeyboardButton("Без разницы", callback_data='Без разницы'),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
